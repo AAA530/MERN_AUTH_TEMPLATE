@@ -1,5 +1,6 @@
 const Users = require("../models/user.model");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const Router = require("express").Router();
 
 //======================================================================================================//
@@ -54,14 +55,32 @@ Router.post("/login", (req, res) => {
 			return res.status(400).json({ msg: "Not all fields are there" });
 		}
 
-		Users.findOne({ email: email }, (err, data) => {
-			if (data) {
-			} else {
-				return res
-					.status(400)
-					.json({
+		Users.findOne({ email: email }, async (err, user) => {
+			if (user) {
+				const isMatch = await bcrypt.compare(password, user.password);
+				if (!isMatch) {
+					return res.status(400).json({
 						msg: "No account with this email has been registered.",
 					});
+				} else {
+					const token = jwt.sign(
+						{ id: user._id },
+						process.env.JWT_SECRET
+					);
+
+					return res.json({
+						token: token,
+						user: {
+							id: user._id,
+							username: user.username,
+							email: user.email,
+						},
+					});
+				}
+			} else {
+				return res.status(400).json({
+					msg: "No account with this email has been registered.",
+				});
 			}
 		});
 	} catch (err) {}
