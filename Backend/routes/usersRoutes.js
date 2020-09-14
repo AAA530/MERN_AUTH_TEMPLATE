@@ -2,10 +2,9 @@ const Users = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const Router = require("express").Router();
 
-Router.get("/test", (req, res) => {
-	res.send("its working");
-});
-
+//======================================================================================================//
+//	Route for Registering User
+//======================================================================================================//
 Router.post("/register", async (req, res) => {
 	try {
 		const data = req.body;
@@ -43,6 +42,29 @@ Router.post("/register", async (req, res) => {
 	} catch (err) {
 		return res.status(500).json({ err });
 	}
+});
+
+//======================================================================================================//
+//	Route for Login
+//======================================================================================================//
+Router.post("/login", (req, res) => {
+	try {
+		const { email, password } = req.body;
+		if (!email || !password) {
+			return res.status(400).json({ msg: "Not all fields are there" });
+		}
+
+		Users.findOne({ email: email }, (err, data) => {
+			if (data) {
+			} else {
+				return res
+					.status(400)
+					.json({
+						msg: "No account with this email has been registered.",
+					});
+			}
+		});
+	} catch (err) {}
 });
 
 module.exports = Router;
