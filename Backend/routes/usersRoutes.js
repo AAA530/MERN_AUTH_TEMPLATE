@@ -2,6 +2,7 @@ const Users = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Router = require("express").Router();
+const Auth = require("./../middleware/auth");
 
 //======================================================================================================//
 //	Route for Registering User
@@ -83,7 +84,22 @@ Router.post("/login", (req, res) => {
 				});
 			}
 		});
-	} catch (err) {}
+	} catch (err) {
+		return res.status(500).json({ err });
+	}
+});
+
+//======================================================================================================//
+//	Route for Deleting Account
+//======================================================================================================//
+Router.delete("/delete", Auth, async (req, res) => {
+	try {
+		Users.findByIdAndDelete(req.user, (err, d) => {
+			res.json(d);
+		});
+	} catch (err) {
+		return res.status(500).json({ err });
+	}
 });
 
 module.exports = Router;
