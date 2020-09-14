@@ -1,2 +1,2 @@
-# Amazon_clone
-Amazon CLone With React JS and Firebase
+# MERN Starter files with AUTH
+Using MERN starter files for speedy process.
