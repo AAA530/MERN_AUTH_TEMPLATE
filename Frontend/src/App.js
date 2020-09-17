@@ -4,6 +4,9 @@ import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import Header from "./components/Layout/Header";
 import Home from "./components/Pages/Home";
+
+import UserContext from "./Context/userContext";
+
 import "./Styles.css";
 
 function App() {
