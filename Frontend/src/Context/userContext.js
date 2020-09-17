@@ -1,2 +1,3 @@
-import { createContex } from "react";
-export default createContex(null);
+import { createContext } from "react";
+
+export default createContext(null);
