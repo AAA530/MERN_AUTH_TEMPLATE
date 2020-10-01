@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
@@ -12,9 +12,17 @@ import UserContext from "./Context/UserContext";
 
 function App() {
 	const [userData, setUserData] = useState({
-		token: 12,
-		user: 12,
+		token: undefined,
+		user: undefined,
 	});
+
+	useEffect(() => {
+		const checkLoggedin = async () => {
+			const token = localStorage.getItem("auth-token");
+		};
+
+		checkLoggedin();
+	}, []);
 
 	return (
 		<>

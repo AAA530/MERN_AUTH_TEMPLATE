@@ -102,4 +102,23 @@ Router.delete("/delete", Auth, async (req, res) => {
 	}
 });
 
+//======================================================================================================//
+//	Route for jwt token validation
+//======================================================================================================//
+Router.post("/tokenIsValid", async (req, res) => {
+	try {
+		const token = req.header("x-auth-token");
+		if (!token) return res.json(false);
+
+		const verified = jwt.verify(token, process.env.JWT_SECRET);
+		if (!verified) return res.json(false);
+
+		const user = await Users.findById(verified.id);
+		if (!user) return res.json(false);
+
+		return res.json();
+	} catch (err) {
+		return res.status(500).json({ err });
+	}
+});
 module.exports = Router;
