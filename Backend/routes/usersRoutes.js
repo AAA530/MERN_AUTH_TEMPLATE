@@ -116,10 +116,25 @@ Router.post("/tokenIsValid", async (req, res) => {
 		const user = await Users.findById(verified.id);
 		if (!user) return res.json(false);
 
-		return res.json();
+		return res.json(true);
 	} catch (err) {
 		return res.status(500).json({ err });
 	}
+});
+
+//======================================================================================================//
+//	Route to get User Data
+//======================================================================================================//
+Router.get("/", Auth, (req, res) => {
+	console.log("in");
+	Users.findById(req.user, (err, data) => {
+		if (err) {
+			return res.json(err);
+		} else {
+			console.log("in");
+			return res.json(data);
+		}
+	});
 });
 
 module.exports = Router;
