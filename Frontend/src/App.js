@@ -4,6 +4,7 @@ import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import Header from "./components/Layout/Header";
 import Home from "./components/Pages/Home";
+import axios from "axios";
 
 import "./Styles.css";
 // import UserContext from "./Context/UserContext";
@@ -19,6 +20,7 @@ function App() {
 	useEffect(() => {
 		const checkLoggedin = async () => {
 			const token = localStorage.getItem("auth-token");
+			const tokenRes = await axios.post();
 		};
 
 		checkLoggedin();

@@ -121,4 +121,5 @@ Router.post("/tokenIsValid", async (req, res) => {
 		return res.status(500).json({ err });
 	}
 });
+
 module.exports = Router;
