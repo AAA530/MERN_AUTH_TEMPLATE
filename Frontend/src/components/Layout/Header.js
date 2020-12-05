@@ -37,7 +37,7 @@ function Header() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            News
+            Template
           </Typography>
 
           <AuthOption />
