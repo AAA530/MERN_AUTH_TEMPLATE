@@ -6,7 +6,7 @@ import Header from "./components/Layout/Header";
 import Home from "./components/Pages/Home";
 import Axios from "axios";
 
-import "./Styles.css";
+import "./App.css";
 // import UserContext from "./Context/UserContext";
 import { UserContext, UserProvider } from "./Context/UserContext";
 // const UserContext = createContext();
