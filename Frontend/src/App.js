@@ -8,7 +8,7 @@ import Axios from "axios";
 
 import "./Styles.css";
 // import UserContext from "./Context/UserContext";
-// import { UserContext, UserProvider } from "./Context/UserContext";
+import { UserContext, UserProvider } from "./Context/UserContext";
 // const UserContext = createContext();
 
 function App() {
@@ -50,14 +50,14 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        {/* <UserContext.Provider value={{ userData, setUserData }}> */}
-        <Header />
-        <Switch>
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
-          <Route path="/" component={Home} />
-        </Switch>
-        {/* </UserContext.Provider> */}
+        <UserContext.Provider value={{ userData, setUserData }}>
+          <Header />
+          <Switch>
+            <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
+            <Route path="/" component={Home} />
+          </Switch>
+        </UserContext.Provider>
       </BrowserRouter>
     </>
   );
