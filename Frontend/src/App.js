@@ -8,7 +8,7 @@ import Axios from "axios";
 
 import "./Styles.css";
 // import UserContext from "./Context/UserContext";
-// import UserContext from "./Context/UserContext";
+// import { UserContext, UserProvider } from "./Context/UserContext";
 // const UserContext = createContext();
 
 function App() {
