@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -13,39 +13,52 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Check me out at Github "}
-      <Link color="inherit" href="https://github.com/AAA530">
-        @AAA
-      </Link>{" "}
-      {"."}
-    </Typography>
-  );
-}
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
 export default function Register() {
+  const [obj, setObj] = useState({});
+
+  const handleInputChange = (event) => {
+    const vaule = event.target.value;
+    const name = event.target.name;
+    setObj({
+      ...obj,
+      [name]: vaule,
+    });
+  };
+
+  const handleSubmit = () => {};
+  console.log(obj);
+  function Copyright() {
+    return (
+      <Typography variant="body2" color="textSecondary" align="center">
+        {"Check me out at Github "}
+        <Link color="inherit" href="https://github.com/AAA530">
+          @AAA
+        </Link>{" "}
+        {"."}
+      </Typography>
+    );
+  }
+
+  const useStyles = makeStyles((theme) => ({
+    paper: {
+      marginTop: theme.spacing(8),
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    avatar: {
+      margin: theme.spacing(1),
+      backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+      // width: "100%", // Fix IE 11 issue.
+      marginTop: theme.spacing(3),
+    },
+    submit: {
+      margin: theme.spacing(3, 0, 2),
+    },
+  }));
+
   const classes = useStyles();
 
   return (
@@ -58,18 +71,19 @@ export default function Register() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleSubmit} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
                 autoComplete="fname"
-                name="firstName"
+                name="first_name"
                 variant="outlined"
                 required
                 fullWidth
                 id="firstName"
                 label="First Name"
                 autoFocus
+                onChange={handleInputChange}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -77,10 +91,12 @@ export default function Register() {
                 variant="outlined"
                 required
                 fullWidth
-                id="lastName"
+                id="last_name"
                 label="Last Name"
-                name="lastName"
-                autoComplete="lname"
+                name="last_name"
+                onChange={handleInputChange}
+
+                // autoComplete="lname"
               />
             </Grid>
 
@@ -92,7 +108,9 @@ export default function Register() {
                 id="usename"
                 label="Username"
                 name="username"
-                autoComplete="username"
+                onChange={handleInputChange}
+
+                // autoComplete="username"
               />
             </Grid>
             <Grid item xs={12}>
@@ -103,7 +121,9 @@ export default function Register() {
                 id="email"
                 label="Email Address"
                 name="email"
-                autoComplete="email"
+                onChange={handleInputChange}
+
+                // autoComplete="email"
               />
             </Grid>
             <Grid item xs={12}>
@@ -115,15 +135,30 @@ export default function Register() {
                 label="Password"
                 type="password"
                 id="password"
-                autoComplete="current-password"
+                onChange={handleInputChange}
+
+                // autoComplete="current-password"
               />
             </Grid>
             <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="password_check"
+                label="Password Check"
+                type="password"
+                onChange={handleInputChange}
+                id="password"
+                // autoComplete="current-password"
+              />
+            </Grid>
+            {/* <Grid item xs={12}>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                 label="I want to receive inspiration, marketing promotions and updates via email."
               />
-            </Grid>
+            </Grid> */}
           </Grid>
           <Button
             type="submit"

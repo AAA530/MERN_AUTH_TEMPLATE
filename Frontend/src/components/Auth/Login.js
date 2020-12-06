@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -25,27 +25,38 @@ function Copyright() {
   );
 }
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
 export default function Login() {
+  const [obj, setObj] = useState({});
+
+  const handleInputChange = (event) => {
+    const vaule = event.target.value;
+    const name = event.target.name;
+    setObj({
+      ...obj,
+      [name]: vaule,
+    });
+  };
+
+  console.log(obj);
+  const useStyles = makeStyles((theme) => ({
+    paper: {
+      marginTop: theme.spacing(8),
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    avatar: {
+      margin: theme.spacing(1),
+      backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+      width: "100%", // Fix IE 11 issue.
+      marginTop: theme.spacing(1),
+    },
+    submit: {
+      margin: theme.spacing(3, 0, 2),
+    },
+  }));
   const classes = useStyles();
 
   return (
@@ -69,6 +80,7 @@ export default function Login() {
             name="email"
             autoComplete="email"
             autoFocus
+            onChange={handleInputChange}
           />
           <TextField
             variant="outlined"
@@ -80,6 +92,7 @@ export default function Login() {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={handleInputChange}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
