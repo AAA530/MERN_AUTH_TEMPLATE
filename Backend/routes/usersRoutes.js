@@ -11,7 +11,13 @@ Router.post("/register", async (req, res) => {
   try {
     const data = req.body;
 
-    if (!data.email || !data.password || !data.passwordCheck) {
+    if (
+      !data.email ||
+      !data.password ||
+      !data.passwordCheck ||
+      !data.first_name ||
+      !data.last_name
+    ) {
       return res.status(400).json({ msg: "Not all fields are there" });
     }
     if (data.password.length < 5) {
@@ -63,18 +69,14 @@ Router.post("/login", (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
           return res.status(400).json({
-            msg: "No account with this email has been registered.",
+            msg: "Check Your Password again",
           });
         } else {
           const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
           return res.json({
             token: token,
-            user: {
-              id: user._id,
-              username: user.username,
-              email: user.email,
-            },
+            user: user,
           });
         }
       } else {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -12,6 +12,14 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+
+import SweetAlert from "sweetalert2-react";
+
+import { useHistory } from "react-router-dom";
+
+import { UserContext, UserProvider } from "../../Context/UserContext";
+
+import Axios from "axios";
 
 function Copyright() {
   return (
@@ -27,6 +35,11 @@ function Copyright() {
 
 export default function Login() {
   const [obj, setObj] = useState({});
+  const [error, setError] = useState(false);
+
+  const { userData, setUserData } = useContext(UserContext);
+
+  const history = useHistory();
 
   const handleInputChange = (event) => {
     const vaule = event.target.value;
@@ -35,6 +48,28 @@ export default function Login() {
       ...obj,
       [name]: vaule,
     });
+  };
+
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      let logUser = obj;
+
+      const loginres = await Axios.post("http://localhost:5000/users/login", {
+        email: logUser.email,
+        password: logUser.password,
+      });
+
+      setUserData({
+        token: loginres.data.token,
+        user: loginres.data.user,
+      });
+
+      localStorage.setItem("auth-token", loginres.data.token);
+      history.push("/");
+    } catch (err) {
+      err.response.data.msg && setError(err.response.data.msg);
+    }
   };
 
   console.log(obj);
@@ -69,7 +104,13 @@ export default function Login() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <SweetAlert
+          show={error}
+          title="Error"
+          text={error}
+          onConfirm={() => setError(false)}
+        />
+        <form className={classes.form} onSubmit={handleSubmit} noValidate>
           <TextField
             variant="outlined"
             margin="normal"

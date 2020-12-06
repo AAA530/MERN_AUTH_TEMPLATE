@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -13,9 +13,22 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
+import SweetAlert from "sweetalert2-react";
+
+import { useHistory } from "react-router-dom";
+
+import { UserContext, UserProvider } from "../../Context/UserContext";
+
+import Axios from "axios";
+
 export default function Register() {
   const [obj, setObj] = useState({});
+  const [error, setError] = useState(false);
 
+  const { userData, setUserData } = useContext(UserContext);
+
+  const history = useHistory();
+  console.log(userData);
   const handleInputChange = (event) => {
     const vaule = event.target.value;
     const name = event.target.name;
@@ -25,7 +38,28 @@ export default function Register() {
     });
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      let newUser = obj;
+      await Axios.post("http://localhost:5000/users/register", newUser);
+
+      const loginres = await Axios.post("http://localhost:5000/users/login", {
+        email: newUser.email,
+        password: newUser.password,
+      });
+
+      setUserData({
+        token: loginres.data.token,
+        user: loginres.data.user,
+      });
+
+      localStorage.setItem("auth-token", loginres.data.token);
+      history.push("/");
+    } catch (err) {
+      err.response.data.msg && setError(err.response.data.msg);
+    }
+  };
   console.log(obj);
   function Copyright() {
     return (
@@ -71,6 +105,12 @@ export default function Register() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
+        <SweetAlert
+          show={error}
+          title="Error"
+          text={error}
+          onConfirm={() => setError(false)}
+        />
         <form className={classes.form} onSubmit={handleSubmit} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
@@ -145,7 +185,7 @@ export default function Register() {
                 variant="outlined"
                 required
                 fullWidth
-                name="password_check"
+                name="passwordCheck"
                 label="Password Check"
                 type="password"
                 onChange={handleInputChange}
