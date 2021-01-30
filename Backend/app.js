@@ -15,12 +15,12 @@ mongoose.set("useCreateIndex", true);
 mongoose.set("useUnifiedTopology", true);
 
 mongoose.connect("mongodb://localhost/MERN_AUTH", (err, db) => {
-	console.log("Db connected");
+  console.log("Db connected");
 });
 
 app.use("/users", UserRoutes);
 
 const port = 5000 || process.env.PORT;
 app.listen(port, () => {
-	console.log(`Server is started on port :${port}`);
+  console.log(`Server is started on port :${port}`);
 });
