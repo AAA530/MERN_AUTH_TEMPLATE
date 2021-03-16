@@ -9,6 +9,7 @@ import Axios from "axios";
 import "./App.css";
 // import UserContext from "./Context/UserContext";
 import { UserContext, UserProvider } from "./Context/UserContext";
+import { sendHttpRequest } from "./helper/ajax";
 // const UserContext = createContext();
 
 function App() {
@@ -16,32 +17,55 @@ function App() {
     token: undefined,
     user: undefined,
   });
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const checkLoggedin = async () => {
-      let token = localStorage.getItem("auth-token");
-      if (token === null) {
-        localStorage.setItem("auth-token", "");
-        token = "";
-      }
-      const tokenRes = await Axios.post(
-        "http://localhost:5000/users/tokenIsValid",
-        null,
-        { headers: { "x-auth-token": token } }
-      );
+      try {
+        let token = localStorage.getItem("auth-token");
+        if (token === null) {
+          localStorage.setItem("auth-token", "");
+          token = "";
+        }
+        // const tokenRes = await Axios.post(
+        //   "http://localhost:5000/users/tokenIsValid",
+        //   null,
+        //   { headers: { "x-auth-token": token } }
+        // );
 
-      if (tokenRes) {
-        const userRes = await Axios.get("http://localhost:5000/users", {
-          headers: { "x-auth-token": token },
-        });
-        console.log(userRes);
-        setUserData({
-          token,
-          user: userRes.data,
-        });
-      }
+        const tokenRes = await sendHttpRequest(
+          "POST",
+          "http://localhost:5000/users/tokenIsValid",
+          {},
+          token
+        );
 
-      console.log(tokenRes.data);
+        console.log(
+          tokenRes + "***************************************************"
+        );
+
+        if (tokenRes) {
+          // const userRes = await Axios.get("http://localhost:5000/users", {
+          //   headers: { "x-auth-token": token },
+          // });
+
+          const userRes = await sendHttpRequest(
+            "GET",
+            "http://localhost:5000/users",
+            {},
+            token
+          );
+          console.log(userRes);
+          console.log("******-------------------------------------------");
+          setUserData({
+            token,
+            user: userRes,
+          });
+        }
+
+        console.log(tokenRes);
+      } finally {
+        setLoading(false);
+      }
     };
 
     checkLoggedin();
@@ -49,16 +73,20 @@ function App() {
 
   return (
     <>
-      <BrowserRouter>
-        <UserContext.Provider value={{ userData, setUserData }}>
-          <Header />
-          <Switch>
-            <Route path="/login" component={Login} />
-            <Route path="/register" component={Register} />
-            <Route path="/" component={Home} />
-          </Switch>
-        </UserContext.Provider>
-      </BrowserRouter>
+      {loading ? (
+        <p>loading</p>
+      ) : (
+        <BrowserRouter>
+          <UserContext.Provider value={{ userData, setUserData }}>
+            <Header />
+            <Switch>
+              <Route path="/login" component={Login} />
+              <Route path="/register" component={Register} />
+              <Route path="/home" component={Home} />
+            </Switch>
+          </UserContext.Provider>
+        </BrowserRouter>
+      )}
     </>
   );
 }

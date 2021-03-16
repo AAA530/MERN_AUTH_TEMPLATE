@@ -20,6 +20,7 @@ import { useHistory } from "react-router-dom";
 import { UserContext, UserProvider } from "../../Context/UserContext";
 
 import Axios from "axios";
+import { sendHttpRequest } from "../../helper/ajax";
 
 export default function Register() {
   const [obj, setObj] = useState({});
@@ -42,22 +43,35 @@ export default function Register() {
     try {
       e.preventDefault();
       let newUser = obj;
-      await Axios.post("http://localhost:5000/users/register", newUser);
+      // await Axios.post("http://localhost:5000/users/register", newUser);
 
-      const loginres = await Axios.post("http://localhost:5000/users/login", {
-        email: newUser.email,
-        password: newUser.password,
-      });
+      await sendHttpRequest(
+        "POST",
+        "http://localhost:5000/users/register",
+        newUser
+      );
+
+      // const loginres = await Axios.post("http://localhost:5000/users/login", {
+      //   email: newUser.email,
+      //   password: newUser.password,
+      // });
+
+      const loginres = await sendHttpRequest(
+        "POST",
+        "http://localhost:5000/users/login",
+        newUser
+      );
+      console.log(loginres);
 
       setUserData({
-        token: loginres.data.token,
-        user: loginres.data.user,
+        token: loginres.token,
+        user: loginres.user,
       });
 
-      localStorage.setItem("auth-token", loginres.data.token);
-      history.push("/");
+      localStorage.setItem("auth-token", loginres.token);
+      history.push("/home");
     } catch (err) {
-      err.response.data.msg && setError(err.response.data.msg);
+      err.response.msg && setError(err.response.msg);
     }
   };
   console.log(obj);
@@ -159,7 +173,7 @@ export default function Register() {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="Student id"
                 name="email"
                 onChange={handleInputChange}
 
